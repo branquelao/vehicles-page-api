@@ -1,0 +1,51 @@
+﻿@model List<Vehicle>
+@{
+}
+
+<h2 class="text-center mb-5">List of Vehicles</h2>
+
+<div class="row mb-5">
+    <div class="col">
+        <a class="btn btn-primary" asp-controller="Vehicles" asp-action="Create">New Vehicle</a>
+    </div>
+    <div class="col">
+
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Image</th>
+            <th>Created At</th>
+            <th>Action</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach(var vehicle in Model)
+        {
+            <tr>
+                <td>@vehicle.Id</td>
+                <td>@vehicle.Make</td>
+                <td>@vehicle.Model</td>
+                <td>@vehicle.Category</td>
+                <td>@(vehicle.Price)$</td>
+                <td><img src="/vehicles/@vehicle.ImageFileName" width="100" /></td>
+                <td>@vehicle.CreatedAt.ToString("dd/MM/yyyy")</td>
+                <td style="white-space:nowrap">
+                    <a class="btn btn-primary btn-sm" asp-controller="Vehicles" asp-action="Edit"
+                       asp-route-id="@vehicle.Id">Edit</a>
+                    <a class="btn btn-danger btn-sm" asp-controller="Vehicles" asp-action="Delete"
+                       asp-route-id="@vehicle.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
