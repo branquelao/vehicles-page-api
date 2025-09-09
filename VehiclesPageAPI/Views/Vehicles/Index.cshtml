@@ -43,7 +43,7 @@
                     <a class="btn btn-primary btn-sm" asp-controller="Vehicles" asp-action="Edit"
                        asp-route-id="@vehicle.Id">Edit</a>
                     <a class="btn btn-danger btn-sm" asp-controller="Vehicles" asp-action="Delete"
-                       asp-route-id="@vehicle.Id">Delete</a>
+                       asp-route-id="@vehicle.Id" onclick="return conform('Are you sure?')">Delete</a>
                 </td>
             </tr>
         }

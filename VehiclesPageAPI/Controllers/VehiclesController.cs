@@ -134,5 +134,21 @@ namespace VehiclesPageAPI.Controllers
             context.SaveChanges();
             return RedirectToAction("Index", "Vehicles");
         }
+
+        public IActionResult Delete(int id)
+        {
+            var vehicle = context.Vehicles.Find(id);
+            if (vehicle == null)
+            {
+                return RedirectToAction("Index", "Vehicles");
+            }
+            string imageFullPath = environment.WebRootPath + "/vehicles/" + vehicle.ImageFileName;
+            System.IO.File.Delete(imageFullPath);
+
+            context.Vehicles.Remove(vehicle);
+            context.SaveChanges(true);
+
+            return RedirectToAction("Index", "Vehicles");
+        }
     }
 }
