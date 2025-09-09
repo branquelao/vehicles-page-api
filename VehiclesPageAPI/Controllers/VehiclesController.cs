@@ -64,5 +64,30 @@ namespace VehiclesPageAPI.Controllers
 
             return RedirectToAction("Index", "Vehicles");
         }
+
+        public IActionResult Edit(int id)
+        {
+            var vehicle = context.Vehicles.Find(id);
+
+            if (vehicle == null)
+            {
+                return RedirectToAction("Index", "Vehicles");
+            }
+
+            var vehicleDto = new VehicleDto
+            {
+                Make = vehicle.Make,
+                Model = vehicle.Model,
+                Category = vehicle.Category,
+                Price = vehicle.Price,
+                Description = vehicle.Description,
+            };
+
+            ViewData["VehicleId"] = vehicle.Id;
+            ViewData["ImageFileName"] = vehicle.ImageFileName;
+            ViewData["CreatedAt"] = vehicle.CreatedAt.ToString("dd/MM/yyyy");
+
+            return View(vehicleDto);
+        }
     }
 }
