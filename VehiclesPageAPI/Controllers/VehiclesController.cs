@@ -74,7 +74,7 @@ namespace VehiclesPageAPI.Controllers
                 return RedirectToAction("Index", "Vehicles");
             }
 
-            var vehicleDto = new VehicleDto
+            var vehicleDto = new VehicleDto()
             {
                 Make = vehicle.Make,
                 Model = vehicle.Model,
@@ -88,6 +88,51 @@ namespace VehiclesPageAPI.Controllers
             ViewData["CreatedAt"] = vehicle.CreatedAt.ToString("dd/MM/yyyy");
 
             return View(vehicleDto);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int id, VehicleDto vehicleDto)
+        {
+            var vehicle = context.Vehicles.Find(id);
+
+            if(vehicle == null)
+            {
+                return RedirectToAction("Index", "Vehicles");
+            }
+
+            if(!ModelState.IsValid)
+            {
+                ViewData["VehicleId"] = vehicle.Id;
+                ViewData["ImageFileName"] = vehicle.ImageFileName;
+                ViewData["CreatedAt"] = vehicle.CreatedAt.ToString("dd/MM/yyyy");
+                return View(vehicleDto);
+            }
+
+            string newFileName = vehicle.ImageFileName;
+            if(vehicleDto.ImageFile != null)
+            {
+                newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff");
+                newFileName += Path.GetExtension(vehicleDto.ImageFile.FileName);
+
+                string imageFullPath = environment.WebRootPath + "/vehicles/" + newFileName;
+                using (var stream = System.IO.File.Create(imageFullPath))
+                {
+                    vehicleDto.ImageFile.CopyTo(stream);
+                }
+
+                string oldImageFullPath = environment.WebRootPath + "/vehicles/" + vehicle.ImageFileName;
+                System.IO.File.Delete(oldImageFullPath);
+            }
+
+            vehicle.Make = vehicleDto.Make;
+            vehicle.Model = vehicleDto.Model;
+            vehicle.Category = vehicleDto.Category;
+            vehicle.Price = vehicleDto.Price;
+            vehicle.Description = vehicleDto.Description;
+            vehicle.ImageFileName = newFileName;
+
+            context.SaveChanges();
+            return RedirectToAction("Index", "Vehicles");
         }
     }
 }
