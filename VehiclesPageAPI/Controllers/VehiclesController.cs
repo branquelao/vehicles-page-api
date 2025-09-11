@@ -100,14 +100,6 @@ namespace VehiclesPageAPI.Controllers
                 return RedirectToAction("Index", "Vehicles");
             }
 
-            if(!ModelState.IsValid)
-            {
-                ViewData["VehicleId"] = vehicle.Id;
-                ViewData["ImageFileName"] = vehicle.ImageFileName;
-                ViewData["CreatedAt"] = vehicle.CreatedAt.ToString("dd/MM/yyyy");
-                return View(vehicleDto);
-            }
-
             string newFileName = vehicle.ImageFileName;
             if(vehicleDto.ImageFile != null)
             {
