@@ -26,6 +26,11 @@ namespace VehiclesPageAPI.Controllers
             return View();
         }
 
+        public IActionResult Search()
+        {
+            return View();
+        }
+
         [HttpPost]
         public IActionResult Create(VehicleDto vehicleDto)
         {
