@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
 using VehiclesPageAPI.Models;
 using VehiclesPageAPI.Services;
@@ -17,16 +18,21 @@ namespace VehiclesPageAPI.Controllers
         }
         public IActionResult Index()
         {
-            var vehicles = context.Vehicles.OrderByDescending(p => p.Id).ToList();
+            var vehicles = context.Vehicles.OrderByDescending(v => v.Id).ToList();
             return View(vehicles);
         }
 
-        public IActionResult Create()
+        public IActionResult Search()
         {
             return View();
         }
 
-        public IActionResult Search()
+        public async Task<IActionResult> SearchResults(String SearchPhrase)
+        {
+            return View("Index", await context.Vehicles.Where(v => v.Model.Contains(SearchPhrase)).ToListAsync());
+        }
+
+        public IActionResult Create()
         {
             return View();
         }
